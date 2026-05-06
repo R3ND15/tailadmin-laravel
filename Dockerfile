@@ -13,6 +13,11 @@ ENV APACHE_DOCUMENT_ROOT /var/www/html/public
 RUN sed -ri -e 's!/var/www/html!${APACHE_DOCUMENT_ROOT}!g' /etc/apache2/sites-available/*.conf \
     && sed -ri -e 's!/var/www/!${APACHE_DOCUMENT_ROOT}!g' /etc/apache2/apache2.conf /etc/apache2/conf-available/*.conf
 
+RUN echo "<Directory /var/www/html/public>\n\
+AllowOverride All\n\
+Require all granted\n\
+</Directory>" >> /etc/apache2/apache2.conf
+
 COPY . .
 
 RUN curl -sS https://getcomposer.org/installer | php \
@@ -20,7 +25,8 @@ RUN curl -sS https://getcomposer.org/installer | php \
 
 RUN composer install
 
-RUN chmod -R 775 storage bootstrap/cache
+RUN chown -R www-data:www-data storage bootstrap/cache \
+    && chmod -R 775 storage bootstrap/cache
 
 EXPOSE 80
 
