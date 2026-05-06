@@ -1,0 +1,32 @@
+name: Deploy Laravel
+
+on:
+  push:
+    branches: [ "main" ]
+
+jobs:
+  build-deploy:
+    runs-on: self-hosted
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Login Docker Hub
+        run: echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
+
+      - name: Build Image
+        run: docker build -t r3nd0ck3r/tailadmin-laravel:beta .
+
+      - name: Push Image
+        run: docker push r3nd0ck3r/tailadmin-laravel:beta
+
+      - name: Stop old container
+        run: docker rm -f laravel || true
+
+      - name: Run container
+        run: |
+          docker run -d \
+          --name laravel \
+          -p 8090:80 \
+          r3nd0ck3r/tailadmin-laravel:beta
