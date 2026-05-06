@@ -1,10 +1,12 @@
-FROM php:8.1-fpm
+FROM php:8.1-apache
 
-WORKDIR /var/www
+WORKDIR /var/www/html
 
 RUN apt-get update && apt-get install -y \
     git unzip libzip-dev zip \
     && docker-php-ext-install pdo pdo_mysql zip
+
+RUN a2enmod rewrite
 
 COPY . .
 
@@ -13,6 +15,6 @@ RUN curl -sS https://getcomposer.org/installer | php \
 
 RUN composer install
 
-EXPOSE 9000
+EXPOSE 80
 
-CMD ["php-fpm"]
+CMD ["apache2-foreground"]
