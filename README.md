@@ -172,3 +172,4 @@ The TailAdmin is open-sourced software licensed under the [MIT license](https://
     <img src="https://img.buymeacoffee.com/button-api/?text=Buy me a coffee&emoji=&slug=sinanaydogan&button_colour=FFDD00&font_colour=000000&font_family=Lato&outline_colour=000000&coffee_colour=ffffff">
 </a>
 </p>
+# trigger actions
